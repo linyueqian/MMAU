@@ -29,7 +29,8 @@ Please refer to our evaluation folder for detailed information on evaluating wit
 🎯 **MMAU Evaluation**
 
 - **We have released a full suite comprising 1000 test-mini samples and 9000 test samples. However, the 10,000 test questions are available without their answers.**
-- Use (https://drive.google.com/file/d/1fERNIyTa0HWry6iIG1X-1ACPlUlhlRWA/view?usp=sharing) to download test-mini audios.
+- Use this [link](https://drive.google.com/file/d/1fERNIyTa0HWry6iIG1X-1ACPlUlhlRWA/view?usp=sharing) to download `test-mini audios`.
+- Use this [link](https://drive.google.com/file/d/1XqkRupC723zAeyDn4dYniqNv4uO-8rEg/view?usp=sharing) to download `test-audios`.
 
 The answers and explanations for the test set questions are withheld. You can submit your model's predictions for the **test set** on **[EvalAI]()**.
 
@@ -39,7 +40,7 @@ Should you encounter any data samples potentially breaching the copyright or lic
 
 ## Contact
 - Sakshi: ssakshi@umd.edu
-- Sonal Kumar: sonalkum@umd.edu,
+- Sonal Kumar: sonalkum@umd.edu
 - Sreyan Ghosh: sreyang@umd.edu
 
 ## Citation
