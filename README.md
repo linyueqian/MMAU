@@ -1,7 +1,7 @@
 
 # MMAU
 
-[**🌐 Homepage**](https://mmaubench.github.io/) | [**📖 MMAU arXiv**]()
+[**🌐 Homepage**](https://mmaubench.github.io/) |[**🏆 Leaderboard**](https://sakshi113.github.io/mmau_homepage/#leaderboard) | [**📖 MMAU arXiv**]()
 
 This repo contains the evaluation code and MMAU benchmark for the paper "[MMAU: A MASSIVE MULTI-TASK AUDIO UN-
 DERSTANDING AND REASONING BENCHMARK](----arxiv link-----)"
