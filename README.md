@@ -1,10 +1,13 @@
 
-# MMAU
+# MMAU: A Massive Multi-Task Audio Understanding and Reasoning Benchmark
+<p align="center"><img src="https://github.com/Sakshi113/MMAU/blob/main/mmau_logo.png?raw=true" alt="GAMA Logo." width="300"/></p>
+
 
 [**🌐 Homepage**](https://mmaubench.github.io/) | [**📖 MMAU arXiv**]()
 
-This repo contains the evaluation code and MMAU benchmark for the paper "[MMAU: A MASSIVE MULTI-TASK AUDIO UN-
-DERSTANDING AND REASONING BENCHMARK](----arxiv link-----)"
+This repo contains the evaluation code and MMAU benchmark for the paper "[MMAU: A Massive Multi-Task Audio Understanding and Reasoning Benchmark]()"
+
+
 
 ## Introduction
 
