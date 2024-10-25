@@ -1,3 +1,4 @@
+import argparse
 import json
 import pickle
 from tqdm import tqdm
@@ -23,9 +24,12 @@ def string_match(answer, prediction, choices):
 
 if __name__ == "__main__":
 
-    output_path = "JSON_OUTPUT_PATH"
+    parser = argparse.ArgumentParser(description="Process benchmark JSON and calculate accuracy.")
+    parser.add_argument('--output_path', type=str, required=True, help='Path to save the output JSON file')
     
-    with open(input_path, 'r') as f:
+    args = parser.parse_args()  
+    
+    with open(args.output_path, 'r') as f:
         input_data = json.load(f)
 
     corr, total = 0, 0
@@ -34,7 +38,7 @@ if __name__ == "__main__":
     task_metrics = {'sound': [0, 0], 'music': [0, 0], 'speech': [0, 0]}
     diff_metrics = {'easy': [0, 0], 'hard': [0, 0], 'medium': [0, 0]}
 
-    output_key = 'model_output' # The key that contains model output
+    output_key = 'model_prediction' # The key that contains model output
     no_pred_count = 0
     matched_outputs = []
     new_data = []
