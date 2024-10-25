@@ -7,10 +7,6 @@
 
 This repo contains the evaluation code and MMAU benchmark for the paper "[MMAU: A Massive Multi-Task Audio Understanding and Reasoning Benchmark]()"
 
-[**🌐 Homepage**](https://sakshi113.github.io/mmau_homepage/) |[**🏆 Leaderboard**](https://sakshi113.github.io/mmau_homepage/#leaderboard) | [**📖 MMAU arXiv**]()
-
-
-
 ## Introduction
 
 ### MMAU Benchmark
@@ -25,15 +21,17 @@ MMAU and MMAU-Pro were meticulously designed to challenge and evaluate multimoda
 
 ![Alt text](mmau_process.jpg)
 
-## Evaluation
+## 🎯 Evaluation
 
-Please refer to our evaluation folder for detailed information on evaluating with MMAU:
+- This [evaluation.py](https://github.com/Sakshi113/MMAU/blob/main/evaluation.py) evaluates a large audio language model's predictions for MMAU benchmark.
+- The input should be the original MMAU benchmark file with an additional key named 'model_prediction' which should contain the ALM's prediction for each question.
+  
+To run the script:
+```bash
+python evaluation.py  --input INPUT_JSON_PATH
+```
 
-- [**MMAU Evaluation**]()
-
-🎯 **MMAU Evaluation**
-
-- **We have released a full suite comprising 1000 test-mini samples and 9000 test samples. However, the 10,000 test questions are available without their answers.**
+- **We have released a full suite comprising 1000 test-mini samples and 9000 test samples. The 10,000 test questions are available without their answers.**
 - Use this [link](https://drive.google.com/file/d/1fERNIyTa0HWry6iIG1X-1ACPlUlhlRWA/view?usp=sharing) to download `test-mini audios`.
 - Use this [link](https://drive.google.com/file/d/1XqkRupC723zAeyDn4dYniqNv4uO-8rEg/view?usp=sharing) to download `test-audios`.
 
