@@ -24,7 +24,7 @@ MMAU and MMAU-Pro were meticulously designed to challenge and evaluate multimoda
 ## 🎯 Evaluation
 
 - This [evaluation.py](https://github.com/Sakshi113/MMAU/blob/main/evaluation.py) evaluates a large audio language model's predictions for MMAU benchmark.
-- The input should be the original MMAU benchmark file with an additional key named 'model_prediction' which should contain the ALM's prediction for each question.
+- The input should be the original MMAU benchmark file with an additional key named '`model_prediction`' which should contain the ALM's prediction for each question.
   
 To run the script:
 ```bash
