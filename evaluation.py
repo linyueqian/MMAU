@@ -25,11 +25,11 @@ def string_match(answer, prediction, choices):
 if __name__ == "__main__":
 
     parser = argparse.ArgumentParser(description="Process benchmark JSON and calculate accuracy.")
-    parser.add_argument('--output_path', type=str, required=True, help='Path to save the output JSON file')
+    parser.add_argument('--input', type=str, required=True, help='Path to input JSON file to be evaluated')
     
     args = parser.parse_args()  
     
-    with open(args.output_path, 'r') as f:
+    with open(args.input, 'r') as f:
         input_data = json.load(f)
 
     corr, total = 0, 0
