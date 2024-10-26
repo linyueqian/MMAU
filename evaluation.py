@@ -116,8 +116,6 @@ def evaluate(test_annotation_file, user_submission_file, phase_codename, **kwarg
             submission_result['No Prediction Count'] = metrics['no_pred_count']
             output["result"] = [{'test-mini': submission_result}]
             print("Completed evaluation for Dev Phase")
-        else:
-            print(f"No data for split '{split}' in Dev Phase.")
     elif phase_codename == "test":
         print("Evaluating for Test Phase")
         output["result"] = []
@@ -138,17 +136,8 @@ def evaluate(test_annotation_file, user_submission_file, phase_codename, **kwarg
                 submission_result['No Prediction Count'] = metrics['no_pred_count']
                 output["result"].append({split: submission_result})
                 print(f"Total Accuracy for {split}: {submission_result['Total']}")
-            else:
-                print(f"No data for split '{split}' in Test Phase.")
         print("Completed evaluation for Test Phase")
     else:
         print(f"Unknown phase codename: {phase_codename}")
     print(output)
     return output
-
-# Example usage
-output = evaluate(
-    '/Users/sonalk/Desktop/MMAU Filtering/mmau-test-mini.json',
-    '/Users/sonalk/Desktop/MMAU Filtering/mmau-test-mini_pred.json',
-    'dev'
-)
