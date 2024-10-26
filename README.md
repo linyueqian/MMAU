@@ -31,7 +31,7 @@ To run the script:
 python evaluation.py  --input INPUT_JSON_PATH
 ```
 
-- **We have released a full suite comprising 1000 test-mini samples and 9000 test samples. The 10,000 test questions are available without their answers.**
+- **We have released a full suite comprising 1000 test-mini samples and 9000 test samples. The 9,000 test questions are available without their answers.**
 - Use this [link](https://drive.google.com/file/d/1fERNIyTa0HWry6iIG1X-1ACPlUlhlRWA/view?usp=sharing) to download `test-mini audios`.
 - Use this [link](https://drive.google.com/file/d/1XqkRupC723zAeyDn4dYniqNv4uO-8rEg/view?usp=sharing) to download `test-audios`.
 
