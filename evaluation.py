@@ -1,3 +1,8 @@
+import argparse
+import json
+import pickle
+from tqdm import tqdm
+from pathlib import Path
 import re
 
 def string_match(answer, prediction, choices):
@@ -28,49 +33,37 @@ def string_match(answer, prediction, choices):
     
     return cond1 and cond2
 
-def evaluate(test_annotation_file, user_submission_file, phase_codename, **kwargs):
-    import json
-    from tqdm import tqdm
-    import re
+if __name__ == "__main__":
 
-    print("Starting Evaluation.....")
-    output = {}
-
-    # Read the test data and user submission
-    with open(test_annotation_file, 'r') as f:
+    parser = argparse.ArgumentParser(description="Process benchmark JSON and calculate accuracy.")
+    parser.add_argument('--input', type=str, required=True, help='Path to input JSON file to be evaluated')
+    
+    args = parser.parse_args()  
+    
+    with open(args.input, 'r') as f:
         input_data = json.load(f)
 
-    with open(user_submission_file, 'r') as f:
-        user_predictions = json.load(f)
+    corr, total = 0, 0
 
-    # Check if the number of predictions matches the number of samples
-    if len(input_data) != len(user_predictions):
-        raise ValueError("Number of predictions does not match number of samples.")
 
-    # Attach predictions to the input data
-    for idx, sample in enumerate(input_data):
-        sample['model_prediction'] = user_predictions[idx]['model_prediction']
+    task_metrics = {'sound': [0, 0], 'music': [0, 0], 'speech': [0, 0]}
+    diff_metrics = {'easy': [0, 0], 'hard': [0, 0], 'medium': [0, 0]}
 
-    # Initialize variables
-    splits = set(sample['split'] for sample in input_data)
-    split_metrics = {}
-    for split in splits:
-        split_metrics[split] = {
-            'corr': 0,
-            'total': 0,
-            'task_metrics': {'sound': [0, 0], 'music': [0, 0], 'speech': [0, 0]},
-            'diff_metrics': {'easy': [0, 0], 'medium': [0, 0], 'hard': [0, 0]},
-            'Total': 0,
-            'no_pred_count': 0
-        }
-
-    output_key = 'model_prediction'
+    output_key = 'model_prediction' # The key that contains model output
+    no_pred_count = 0
+    matched_outputs = []
+    new_data = []
     for idx, sample in enumerate(tqdm(input_data)):
-        split = sample['split']
 
-        if output_key not in sample or not sample[output_key]:
+        if sample['split'] == 'test':
+            continue
+
+        if output_key not in sample:
+            continue
+
+        if output_key not in sample:
             _prediction = ''
-            split_metrics[split]['no_pred_count'] += 1
+            no_pred_count += 1
         else:
             _prediction = sample[output_key]
 
@@ -80,64 +73,28 @@ def evaluate(test_annotation_file, user_submission_file, phase_codename, **kwarg
         choices = sample['choices']
 
         if string_match(_answer, _prediction, choices):
-            split_metrics[split]['corr'] += 1
-            split_metrics[split]['task_metrics'][task][0] += 1
-            split_metrics[split]['diff_metrics'][difficulty][0] += 1
+            task_metrics[task][0] += 1
+            diff_metrics[difficulty][0] += 1
+            matched_outputs.append([_answer, _prediction])
+            corr += 1
             sample['match'] = 1
         else:
             sample['match'] = 0
-            # Debugging output for mismatches
-            print(f"Mismatch at index {idx}:")
-            print(f"Answer: '{_answer}'")
-            print(f"Prediction: '{_prediction}'")
-            print(f"Choices: {choices}")
 
-        split_metrics[split]['total'] += 1
-        split_metrics[split]['task_metrics'][task][1] += 1
-        split_metrics[split]['diff_metrics'][difficulty][1] += 1
+        total += 1
+        new_data.append(sample)
+        task_metrics[task][1] += 1
+        diff_metrics[difficulty][1] += 1
 
-    # Prepare the output based on the phase
-    if phase_codename == "dev":
-        print("Evaluating for Dev Phase")
-        split = 'test-mini'
-        if split in split_metrics:
-            metrics = split_metrics[split]
-            submission_result = {
-                f"{task} Accuracy": (metrics['task_metrics'][task][0] / metrics['task_metrics'][task][1]) * 100
-                if metrics['task_metrics'][task][1] != 0 else 0
-                for task in metrics['task_metrics']
-            }
-            submission_result.update({
-                f"{diff} Accuracy": (metrics['diff_metrics'][diff][0] / metrics['diff_metrics'][diff][1]) * 100
-                if metrics['diff_metrics'][diff][1] != 0 else 0
-                for diff in metrics['diff_metrics']
-            })
-            submission_result['Total'] = (metrics['corr'] / metrics['total']) * 100 if metrics['total'] != 0 else 0
-            submission_result['No Prediction Count'] = metrics['no_pred_count']
-            output["result"] = [{'test-mini': submission_result}]
-            print("Completed evaluation for Dev Phase")
-    elif phase_codename == "test":
-        print("Evaluating for Test Phase")
-        output["result"] = []
-        for split in ['test']:
-            if split in split_metrics:
-                metrics = split_metrics[split]
-                submission_result = {
-                    f"{task} Accuracy": (metrics['task_metrics'][task][0] / metrics['task_metrics'][task][1]) * 100
-                    if metrics['task_metrics'][task][1] != 0 else 0
-                    for task in metrics['task_metrics']
-                }
-                submission_result.update({
-                    f"{diff} Accuracy": (metrics['diff_metrics'][diff][0] / metrics['diff_metrics'][diff][1]) * 100
-                    if metrics['diff_metrics'][diff][1] != 0 else 0
-                    for diff in metrics['diff_metrics']
-                })
-                submission_result['Total'] = (metrics['corr'] / metrics['total']) * 100 if metrics['total'] != 0 else 0
-                submission_result['No Prediction Count'] = metrics['no_pred_count']
-                output["result"].append({split: submission_result})
-                print(f"Total Accuracy for {split}: {submission_result['Total']}")
-        print("Completed evaluation for Test Phase")
-    else:
-        print(f"Unknown phase codename: {phase_codename}")
-    print(output)
-    return output
+
+    print("*"*30)
+    for task in task_metrics:
+    
+        print(f"{task} : {(task_metrics[task][0]/task_metrics[task][1])*100 if task_metrics[task][1] != 0 else 0} over {task_metrics[task][1]} samples")
+    print("*"*30)
+    for diff in diff_metrics:
+        print(f"{diff} : {(diff_metrics[diff][0]/diff_metrics[diff][1])*100}")
+    print("*"*30)
+    print(f"Total acc: {(corr/total) * 100} over {total} samples")
+    print("*"*30)
+    print(f"No prediction count: {no_pred_count}")
