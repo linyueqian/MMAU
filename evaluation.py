@@ -1,31 +1,46 @@
+import argparse
 import json
 import pickle
 from tqdm import tqdm
 from pathlib import Path
+import re
 
 def string_match(answer, prediction, choices):
-
-    answer = str(answer)
-    prediction = str(prediction)
-    choices = [str(choice) for choice in choices]
-    if len(prediction) == 0:
+    # Function to normalize and tokenize text
+    def tokenize(text):
+        # Convert to lowercase and find all word tokens
+        return set(re.findall(r'\b\w+\b', text.lower()))
+    
+    # Tokenize prediction and answer
+    prediction_tokens = tokenize(prediction)
+    answer_tokens = tokenize(answer)
+    
+    if not prediction_tokens:
         return False
-
-    not_answers = [choice.lower() for choice in choices if choice != answer]
-
-    cond1 = answer.lower() in prediction.lower()
-    cond2 = not any(choice.lower() in prediction.lower() for choice in not_answers)
-
-    if cond1 and cond2:
-        return True
-    else:
-        return False
+    
+    # Tokenize incorrect choices and exclude tokens present in the answer
+    incorrect_tokens = set()
+    for choice in choices:
+        choice_tokens = tokenize(choice)
+        if choice_tokens != answer_tokens:
+            incorrect_tokens.update(choice_tokens - answer_tokens)
+    
+    # Condition 1: All tokens of the answer are in the prediction
+    cond1 = answer_tokens.issubset(prediction_tokens)
+    
+    # Condition 2: Prediction does not contain any tokens from incorrect choices (excluding shared words)
+    cond2 = prediction_tokens.isdisjoint(incorrect_tokens)
+    
+    return cond1 and cond2
 
 if __name__ == "__main__":
 
-    output_path = "JSON_OUTPUT_PATH"
+    parser = argparse.ArgumentParser(description="Process benchmark JSON and calculate accuracy.")
+    parser.add_argument('--input', type=str, required=True, help='Path to input JSON file to be evaluated')
     
-    with open(input_path, 'r') as f:
+    args = parser.parse_args()  
+    
+    with open(args.input, 'r') as f:
         input_data = json.load(f)
 
     corr, total = 0, 0
@@ -34,7 +49,7 @@ if __name__ == "__main__":
     task_metrics = {'sound': [0, 0], 'music': [0, 0], 'speech': [0, 0]}
     diff_metrics = {'easy': [0, 0], 'hard': [0, 0], 'medium': [0, 0]}
 
-    output_key = 'model_output' # The key that contains model output
+    output_key = 'model_prediction' # The key that contains model output
     no_pred_count = 0
     matched_outputs = []
     new_data = []
