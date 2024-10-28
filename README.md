@@ -51,6 +51,15 @@ Should you encounter any data samples potentially breaching the copyright or lic
 ## Citation
 
 **BibTeX:**
-```bibtex
+```
+@misc{sakshi2024mmaumassivemultitaskaudio,
+      title={MMAU: A Massive Multi-Task Audio Understanding and Reasoning Benchmark}, 
+      author={S Sakshi and Utkarsh Tyagi and Sonal Kumar and Ashish Seth and Ramaneswaran Selvakumar and Oriol Nieto and Ramani Duraiswami and Sreyan Ghosh and Dinesh Manocha},
+      year={2024},
+      eprint={2410.19168},
+      archivePrefix={arXiv},
+      primaryClass={eess.AS},
+      url={https://arxiv.org/abs/2410.19168}, 
+}
 
 ```
